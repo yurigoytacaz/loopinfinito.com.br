@@ -33,7 +33,7 @@
 			}
 		}
 
-		var hideSearch = function() {
+		var hideSearch = function(){
 			$('#search').removeClass( 'show' )
 		}
 
@@ -66,5 +66,71 @@
 			}
 		}, 200 )
 	})
+
+	// atalhos do teclado para navegar entre os posts (prev: j, next: k)
+	if (document.getElementsByClassName == undefined) {
+		document.getElementsByClassName = function(className)
+		{
+			var hasClassName = new RegExp("(?:^|\\s)" + className + "(?:$|\\s)");
+			var allElements = document.getElementsByTagName("*");
+			var results = [];
+
+			var element;
+			for (var i = 0; (element = allElements[i]) != null; i++) {
+				var elementClass = element.className;
+				if (elementClass && elementClass.indexOf(className) != -1 && hasClassName.test(elementClass))
+					results.push(element);
+			}
+
+			return results;
+		}
+	}
+
+	function onKeyPress(e)
+	{
+		var chr = String.fromCharCode(e.charCode);
+		var num = 0;
+
+		switch(chr)
+		{
+			case 'j':
+				num = currentPic == pictures.length - 1 ? pictures.length - 1 : currentPic + 1;
+				gotoPic(num);
+				break;
+			case 'k':
+				num = currentPic == 0 ? 0 : currentPic - 1;
+				gotoPic(num);
+				break;
+			case '/':
+				toggleSearch();
+		}
+
+	}
+
+	document.addEventListener('keypress',onKeyPress,true);
+
+	var pictures = document.getElementsByClassName('post-container');
+	var currentPic = -1;
+
+	function gotoPic(num)
+	{
+		var picTop = calcTotalOffset(pictures[num]);
+		// window.scroll(0,picTop); // comentado pra usar a versão abaixo (animada)
+		$('html,body').animate({scrollTop: picTop})
+		currentPic = num;
+	}
+
+	function calcTotalOffset(node)
+	{
+		var offset = node.offsetTop;
+
+		while( node != document.body)
+		{
+			node = node.offsetParent;
+			offset += node.offsetTop;
+		}
+
+		return offset;
+	}
 
 </script>
