@@ -67,4 +67,44 @@
 		}, 200 )
 	})
 
+	// atalhos de teclado para navegar entre posts
+	$(document).keydown(function(e) {
+		var code = (e.keyCode ? e.keyCode : e.which);
+
+		switch(code) {
+			case 75: // k
+				goToNextPost();
+			break;
+			case 74: // j
+				goToPrevPost();
+			break;
+	    }
+	});
+
+	var postItemTop = 0;
+	var postItemCurrent = 0;
+	var postItem = $('.post-container').eq(postItemCurrent);
+
+	function goToNextPost(){
+		if ( $('.post-container').eq(postItemCurrent+1).length > 0 ) {
+			postItemCurrent++;
+			postItem = $('.post-container').eq(postItemCurrent);
+			postItemTop = postItem.offset().top;
+			$('html,body').animate({scrollTop: postItemTop})
+		} else {
+			return false;
+		}
+	}
+
+	function goToPrevPost(){
+		if ( $('.post-container').eq(postItemCurrent-1).length > 0 ) {
+			postItemCurrent--;
+			postItem = $('.post-container').eq(postItemCurrent);
+			postItemTop = $(postItem).offset().top;
+			$('html,body').animate({scrollTop: postItemTop})
+		} else {
+			return false;
+		}
+	}
+
 </script>
